@@ -16,8 +16,8 @@ points.
 ```mermaid
 flowchart LR
   T[("📝 Topic")] --> O((Orchestrator))
-  O -->|retrieve top-k| 𝒮[(Skill Bank)]
-  O -->|retrieve top-k| ℳ[(Memory Module)]
+  O -->|retrieve top-k| SB[(Skill Bank 𝒮)]
+  O -->|retrieve top-k| MM[(Memory Module ℳ)]
   O --> I[Ideation]:::s1
   I --> P[Planning]:::s1
   P --> C[Coding + Execution]:::s2
@@ -25,8 +25,8 @@ flowchart LR
   A --> W[Writing]:::s3
   W --> R[Review]:::s3
   R --> Paper[("📄 paper.pdf")]
-  W -.->|distil| 𝒮
-  W -.->|distil| ℳ
+  W -.->|distil| SB
+  W -.->|distil| MM
   I -.->|narrations| U["💬 Chat"]
   P -.-> U
   C -.-> U

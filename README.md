@@ -44,19 +44,19 @@ NanoResearch takes a one-line research idea — in **any scholarly field** — a
 
 ```mermaid
 flowchart LR
-  T["📝 Topic"] --> O((Orchestrator))
-  O -->|retrieve| 𝒮[(Skill Bank)]
-  O -->|retrieve| ℳ[(Memory Module)]
+  T[Topic] --> O((Orchestrator))
+  O -->|retrieve| SB[(Skill Bank 𝒮)]
+  O -->|retrieve| MM[(Memory Module ℳ)]
   O --> I[Ideation]:::s1
   I --> P[Planning]:::s1
   P --> C[Coding +<br/>Execution]:::s2
   C --> A[Analysis]:::s2
   A --> W[Writing]:::s3
   W --> R[Review]:::s3
-  R --> Paper["📄 paper.pdf"]
-  W -.->|distil| 𝒮
-  W -.->|distil| ℳ
-  I -.->|narrations| U["💬 Chat"]
+  R --> Paper[paper.pdf]
+  W -.->|distil| SB
+  W -.->|distil| MM
+  I -.->|narrations| U[Chat]
   P -.-> U
   C -.-> U
   A -.-> U
