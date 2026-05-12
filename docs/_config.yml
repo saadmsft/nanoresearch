@@ -1,0 +1,20 @@
+title: NanoResearch
+description: Tri-level co-evolving multi-agent research automation. A faithful re-implementation of arXiv:2605.10813 with a ChatGPT-style web UI.
+theme: jekyll-theme-cayman
+remote_theme: pages-themes/cayman@v0.2.0
+plugins:
+  - jekyll-remote-theme
+  - jekyll-relative-links
+  - jekyll-seo-tag
+relative_links:
+  enabled: true
+  collections: true
+include:
+  - README.md
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default
+exclude:
+  - assets/diagrams/*.mmd

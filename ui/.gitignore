@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.vite/
+.DS_Store
+*.local
+
+# tsc emit from composite project (we only edit the .ts source)
+vite.config.js
+vite.config.d.ts
+*.tsbuildinfo
+**/.tsbuildinfo-node/

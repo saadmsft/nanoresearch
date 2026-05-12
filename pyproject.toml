@@ -1,0 +1,90 @@
+[project]
+name = "nanoresearch"
+version = "0.1.0"
+description = "Faithful reimplementation of NanoResearch (arXiv 2605.10813): tri-level co-evolving multi-agent research automation."
+readme = "README.md"
+requires-python = ">=3.11,<3.13"
+license = { text = "Apache-2.0" }
+authors = [{ name = "Saad Mahmood" }]
+dependencies = [
+    # Core
+    "pydantic>=2.7",
+    "pydantic-settings>=2.4",
+    "structlog>=24.4",
+    "typer>=0.12",
+    "rich>=13.7",
+    "tenacity>=9.0",
+    # Azure / OpenAI
+    "openai>=1.54",
+    "azure-identity>=1.19",
+    # Local LLM (planner) — heavy; install via `pip install -e .[local]`
+    # Listed in optional-deps below.
+    # Storage / retrieval
+    "chromadb>=0.5.18",
+    # HTTP / parsing
+    "httpx>=0.27",
+    "tiktoken>=0.8",
+    # HTTP API (UI backend)
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.30",
+    "sse-starlette>=2.1",
+]
+
+[project.optional-dependencies]
+local = [
+    # Pinned conservatively; M1 Max needs torch >=2.4 for stable MPS.
+    "torch>=2.4",
+    "transformers>=4.46",
+    "peft>=0.13",
+    "accelerate>=1.0",
+    "sentencepiece>=0.2",
+    "safetensors>=0.4",
+]
+dev = [
+    "pytest>=8.3",
+    "pytest-asyncio>=0.24",
+    "pytest-cov>=5.0",
+    "ruff>=0.7",
+    "black>=24.10",
+    "mypy>=1.13",
+    "pre-commit>=4.0",
+    "respx>=0.21",
+]
+
+[project.scripts]
+nanoresearch = "nanoresearch.cli.main:app"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/nanoresearch"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "N", "SIM", "RUF"]
+ignore = ["E501"]  # handled by formatter
+
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+ignore_missing_imports = true
+warn_unused_ignores = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra --strict-markers"
+markers = [
+    "azure: requires Azure AAD auth + GPT-5.1 deployment",
+    "local_model: requires Qwen2.5-7B weights on disk",
+    "slow: long-running test (>30s)",
+]
+asyncio_mode = "auto"

@@ -1,0 +1,20 @@
+{
+  "theme": "dark",
+  "themeVariables": {
+    "background": "#0f172a",
+    "primaryColor": "#1e293b",
+    "primaryTextColor": "#f1f5f9",
+    "primaryBorderColor": "#475569",
+    "lineColor": "#94a3b8",
+    "secondaryColor": "#334155",
+    "tertiaryColor": "#0f172a",
+    "fontFamily": "-apple-system, system-ui, sans-serif"
+  },
+  "flowchart": {
+    "curve": "basis",
+    "padding": 20
+  },
+  "sequence": {
+    "actorFontFamily": "-apple-system, system-ui, sans-serif"
+  }
+}

@@ -1,0 +1,22 @@
+flowchart LR
+  T[Topic] --> O((Orchestrator))
+  O -->|retrieve top-k| SB[(Skill Bank)]
+  O -->|retrieve top-k| MM[(Memory Module)]
+  O --> I[Ideation]:::s1
+  I --> P[Planning]:::s1
+  P --> C[Coding + Execution]:::s2
+  C --> A[Analysis]:::s2
+  A --> W[Writing]:::s3
+  W --> R[Review]:::s3
+  R --> Paper[paper.pdf]
+  W -.->|distil| SB
+  W -.->|distil| MM
+  I -.->|narrations| U[Chat]
+  P -.-> U
+  C -.-> U
+  A -.-> U
+  W -.-> U
+  U -.->|feedback| O
+  classDef s1 fill:#1e3a8a,stroke:#3b82f6,color:#fff
+  classDef s2 fill:#92400e,stroke:#f59e0b,color:#fff
+  classDef s3 fill:#065f46,stroke:#10b981,color:#fff

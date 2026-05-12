@@ -1,0 +1,40 @@
+name: Render diagrams
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "docs/assets/diagrams/*.mmd"
+  workflow_dispatch:
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Install mermaid-cli
+        run: npm install -g @mermaid-js/mermaid-cli@latest
+      - name: Render diagrams
+        run: |
+          cd docs/assets/diagrams
+          for mmd in *.mmd; do
+            name="${mmd%.mmd}"
+            # Skip the "simple" alias source — it shares its name's PNG already.
+            [[ "$name" == "pipeline-simple" ]] && continue
+            echo "Rendering $name"
+            mmdc -i "$mmd" -o "$name.png" -c mermaid.config.json -b transparent --width 1600 --scale 2 || true
+          done
+      - name: Commit rendered PNGs
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/assets/diagrams/*.png
+          if git diff --cached --quiet; then
+            echo "No diagram changes"
+          else
+            git commit -m "docs: refresh rendered diagrams"
+            git push
+          fi

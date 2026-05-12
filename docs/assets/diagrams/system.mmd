@@ -1,0 +1,43 @@
+flowchart TB
+  subgraph User["👤 User"]
+    Chat["💬 Chat UI<br/>(React + Vite)"]
+  end
+
+  subgraph API["⚡ FastAPI server"]
+    Intent["/api/intent<br/>NL → action"]
+    RunMgr["RunManager<br/>(background thread)"]
+    Narr["Narrator<br/>event → English"]
+    SSE["GET /stream<br/>(SSE narrations)"]
+    Files["/paper.pdf<br/>/paper.tex"]
+  end
+
+  subgraph Pipe["🔬 Orchestrator"]
+    direction LR
+    I[Ideation] --> P[Planning]
+    P --> C[Coding]
+    C --> An[Analysis]
+    An --> W[Writing]
+  end
+
+  subgraph Stores["💾 Per-user stores"]
+    Profile[(Profile<br/>JSON)]
+    Skill[(Skill Bank<br/>JSON)]
+    Mem[(Memory Module<br/>JSON)]
+    LoRA[(LoRA adapter<br/>safetensors)]
+  end
+
+  subgraph Models["🤖 LLM backends"]
+    Azure["Azure OpenAI<br/>GPT-5.1 · AAD auth"]
+    Qwen["Qwen2.5-7B<br/>local · MPS · planner only"]
+  end
+
+  Chat <-->|HTTP| Intent
+  Chat <-->|EventSource| SSE
+  Chat -->|download| Files
+  Intent --> RunMgr
+  RunMgr --> Pipe
+  Pipe --> Narr --> SSE
+  Pipe <-->|retrieve / distil| Stores
+  Pipe -->|most calls| Azure
+  Pipe -->|planner calls only| Qwen
+  Qwen <-->|SDPO LoRA training| LoRA

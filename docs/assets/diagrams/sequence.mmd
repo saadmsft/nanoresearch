@@ -1,0 +1,33 @@
+sequenceDiagram
+  autonumber
+  participant U as 👤 User
+  participant C as 💬 Chat
+  participant O as Orchestrator
+  participant SB as Skill Bank
+  participant MM as Memory Module
+  participant LLM as GPT-5.1
+  participant FQ as Feedback Queue
+  participant SDPO as SDPO Trainer
+  participant Q as Qwen + LoRA
+
+  U->>C: "Start a run on X"
+  C->>O: POST /api/runs
+  loop For each stage
+    O->>SB: retrieve top-k skills
+    O->>MM: retrieve top-k memories
+    O->>Q: plan(context) [if planner stage]
+    O->>LLM: stage prompt
+    LLM-->>O: stage artefact
+    O-->>C: trajectory + narration (SSE)
+    C-->>U: "💡 Drafted hypotheses…"
+    U->>C: feedback ℱ
+    C->>O: POST /feedback
+    O->>FQ: enqueue (x, y, ℱ)
+    O->>LLM: distil trajectory
+    LLM-->>O: new skills + memories
+    O->>SB: persist
+    O->>MM: persist
+  end
+  O->>SDPO: drain queue
+  SDPO->>Q: update LoRA via Eq. 14-15
+  Note over Q: User's preferences are now<br/>internalised in the planner.
